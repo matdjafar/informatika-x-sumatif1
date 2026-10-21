@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asesmen Sumatif Informatika Kelas X — SMAIT Al Ishlah Gorontalo</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f0fdf4;
+    }
+    .code-font {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .islamic-pattern {
+      background-color: #064e3b;
+      background-image: radial-gradient(#047857 1px, transparent 1px), radial-gradient(#047857 1px, #064e3b 1px);
+      background-size: 24px 24px;
+      background-position: 0 0, 12px 12px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-800">
+
+  <!-- HEADER -->
+  <header class="islamic-pattern text-white shadow-lg sticky top-0 z-30">
+    <div class="max-w-5xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-amber-400 text-emerald-950 flex items-center justify-center font-extrabold text-xl shadow-md">
+          &lt;/&gt;
+        </div>
+        <div>
+          <span class="text-xs uppercase tracking-widest text-amber-300 font-bold block">SMAIT Al Ishlah Gorontalo • Fase E / Kelas X</span>
+          <h1 class="text-base sm:text-lg font-extrabold leading-tight">Asesmen Sumatif: Algoritma & Struktur Data Standar</h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- Timer Display (Hidden until quiz starts) -->
+        <div id="timerBadge" class="hidden items-center gap-2 bg-emerald-950/80 border border-emerald-600 px-3.5 py-1.5 rounded-lg text-sm font-bold text-amber-300">
+          <span>⏱️</span>
+          <span id="timerText">45:00</span>
+        </div>
+        <!-- Teacher Config Button -->
+        <button onclick="openConfigModal()" title="Pengaturan Endpoint Guru" class="p-2 rounded-lg bg-emerald-800/70 hover:bg-emerald-700 text-emerald-100 transition">
+          ⚙️
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-grow max-w-5xl w-full mx-auto px-4 py-6">
+
+    <!-- ==================== VIEW 1: HALAMAN LOGIN & TADABUR ==================== -->
+    <section id="loginView" class="space-y-6">
+      <!-- Banner Tadabur & Konteks -->
+      <div class="bg-white rounded-2xl shadow-sm border border-emerald-100 p-6 sm:p-8 relative overflow-hidden">
+        <div class="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
+          <div class="space-y-2 max-w-2xl">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+              ✨ Pendekatan INTROFLEX Terpadu • Elemen Berpikir Komputasional
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">
+              Uji Pemahaman Algoritma, Struktur Data & Pseudocode
+            </h2>
+            <p class="text-slate-600 text-sm leading-relaxed">
+              Sebagaimana Allah SWT mengajarkan Nabi Adam AS nama-nama segala sesuatu (<strong>QS. Al-Baqarah: 31</strong>) sebagai dasar klasifikasi ilmu yang teratur (<em>nizham</em>), serta keteladanan <strong>Al-Khawarizmi</strong> dalam meletakkan dasar algoritma, kerjakanlah asesmen ini dengan penuh kejujuran dan ketelitian (<em>itqan</em>).
+            </p>
+          </div>
+          <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-xs space-y-1.5 text-emerald-950 shrink-0 w-full md:w-64">
+            <div class="font-bold text-emerald-800 border-b border-emerald-200 pb-1 mb-2">📋 Detail Instrumen</div>
+            <div class="flex justify-between"><span>Guru Pengampu:</span><span class="font-semibold">Rahmat Djafar, S.Pd., Gr.</span></div>
+            <div class="flex justify-between"><span>Pilihan Ganda:</span><span class="font-semibold">10 Soal (Otomatis)</span></div>
+            <div class="flex justify-between"><span>Soal Uraian / Proyek:</span><span class="font-semibold">2 Soal Kasus</span></div>
+            <div class="flex justify-between"><span>Alokasi Waktu:</span><span class="font-semibold">45 Menit</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Pemilihan Siswa -->
+      <div class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 sm:p-8 max-w-2xl mx-auto">
+        <h3 class="text-lg font-extrabold text-slate-800 mb-1">Identitas Peserta Didik</h3>
+        <p class="text-xs text-slate-500 mb-5">Pilih namamu dari daftar resmi kelas X di bawah ini untuk memulai pengerjaan.</p>
+
+        <div class="space-y-4">
+          <div>
+            <label for="studentSelect" class="block text-sm font-bold text-slate-700 mb-1.5">Nama Lengkap Siswa</label>
+            <select id="studentSelect" class="w-full rounded-xl border-2 border-slate-200 focus:border-emerald-600 focus:ring-0 px-4 py-3 text-sm font-semibold text-slate-800 bg-slate-50">
+              <option value="">-- Pilih Nama Peserta Didik (19 Siswa) --</option>
+              <option value="AHMAD HAFIZ KHAIRY RIZQIANDRA">1. AHMAD HAFIZ KHAIRY RIZQIANDRA</option>
+              <option value="ALIF SATRIA PRAYOGA">2. ALIF SATRIA PRAYOGA</option>
+              <option value="ALMAIRAH ZIVANNA SADAT">3. ALMAIRAH ZIVANNA SADAT</option>
+              <option value="ANAYA KALILA AZ-ZAHRA MOHUNE">4. ANAYA KALILA AZ-ZAHRA MOHUNE</option>
+              <option value="ANUGRAH RILAN PRATAMA INAKU">5. ANUGRAH RILAN PRATAMA INAKU</option>
+              <option value="AZHARANI NUR RAMADHANI">6. AZHARANI NUR RAMADHANI</option>
+              <option value="AZZAM WILDANUM MUKHALLADUN">7. AZZAM WILDANUM MUKHALLADUN</option>
+              <option value="MAWADDAH ALAMRI">8. MAWADDAH ALAMRI</option>
+              <option value="MIRZA AIMAN RAHIM">9. MIRZA AIMAN RAHIM</option>
+              <option value="MOHAMAD SYATHIR ALZAQI LAHATI">10. MOHAMAD SYATHIR ALZAQI LAHATI</option>
+              <option value="MUH FATNUN SYAMIL MUSA">11. MUH FATNUN SYAMIL MUSA</option>
+              <option value="MUH KAYSAN ALI RAHMAN">12. MUH KAYSAN ALI RAHMAN</option>
+              <option value="NADHIF ASRAF IQBAL">13. NADHIF ASRAF IQBAL</option>
+              <option value="QUEENZHA OLII">14. QUEENZHA OLII</option>
+              <option value="RIF'AH KARIMAH BADJA">15. RIF'AH KARIMAH BADJA</option>
+              <option value="SHOFIYYAH N.B MAHADJANI">16. SHOFIYYAH N.B MAHADJANI</option>
+              <option value="SITI MASRURAH USMAN">17. SITI MASRURAH USMAN</option>
+              <option value="ZHOFIRAH AGNIYAH K. DAUD">18. ZHOFIRAH AGNIYAH K. DAUD</option>
+              <option value="ZISTRI AF IDAINI">19. ZISTRI AF IDAINI</option>
+            </select>
+          </div>
+
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-3.5 text-xs text-amber-900 space-y-1">
+            <div class="font-bold">📌 Pakta Integritas & Petunjuk Pengerjaan:</div>
+            <ul class="list-disc list-inside space-y-0.5">
+              <li>Awali dengan membaca <em>Basmalah</em> dan doa sebelum belajar.</li>
+              <li>Jawaban tersimpan otomatis di peramban (<em>auto-save</em>) selama kamu mengerjakan.</li>
+              <li>Pastikan seluruh <strong>10 soal Pilihan Ganda</strong> dan <strong>2 soal Uraian Pseudocode</strong> telah terisi sebelum menekan tombol Kirim.</li>
+            </ul>
+          </div>
+
+          <button onclick="startAssessment()" class="w-full py-3.5 px-6 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm shadow-md hover:shadow-lg transition flex items-center justify-center gap-2">
+            <span>Bismillah, Mulai Kerjakan Asesmen</span>
+            <span>➔</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 2: LEMBAR KERJA ASESMEN ==================== -->
+    <section id="quizView" class="hidden space-y-6">
+      <!-- Info Bar Peserta -->
+      <div class="bg-white rounded-xl p-4 shadow-sm border border-emerald-100 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <span class="text-xs text-slate-400 block">Peserta Didik Aktif:</span>
+          <span id="activeStudentName" class="font-extrabold text-emerald-900 text-sm sm:text-base">-</span>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-semibold">
+          <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200">
+            Terjawab PG: <strong id="answeredCount">0</strong>/10
+          </span>
+        </div>
+      </div>
+
+      <!-- Navigasi Nomor Soal Cepat -->
+      <div class="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
+        <div class="text-xs font-bold text-slate-500 mb-2.5 uppercase tracking-wider">Navigasi Indikator & Nomor Soal:</div>
+        <div id="questionNavGrid" class="flex flex-wrap gap-2">
+          <!-- Diisi via JS -->
+        </div>
+      </div>
+
+      <!-- Daftar 10 Soal Pilihan Ganda -->
+      <div class="space-y-5" id="mcQuestionsContainer">
+        <!-- Dirender secara dinamis via JS -->
+      </div>
+
+      <!-- Bagian II: 2 Soal Uraian & Proyek Pseudocode -->
+      <div class="bg-white rounded-2xl shadow-md border-2 border-emerald-600 overflow-hidden">
+        <div class="bg-emerald-700 text-white px-6 py-4">
+          <span class="text-xs uppercase tracking-widest text-amber-300 font-bold">Bagian II • Uraian & Proyek Akhir Pseudocode</span>
+          <h3 class="text-lg font-extrabold">Analisis Algoritma, Nilai Nizham/Hikmah, dan Perancangan Pseudocode</h3>
+        </div>
+
+        <div class="p-6 space-y-6">
+          <!-- Soal Uraian 1 -->
+          <div class="space-y-2 border-b border-slate-200 pb-6">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-900 font-bold text-xs">Uraian 1</span>
+              <span class="text-xs font-semibold text-emerald-700">Indikator 2 (Efisiensi Algoritma) & Indikator 5 (Internalisasi Nilai Islam)</span>
+            </div>
+            <p class="text-sm font-semibold text-slate-800 leading-relaxed">
+              1. Panitia Ramadhan Masjid SMAIT Al Ishlah memiliki daftar <strong>100 nama donatur tetap yang sudah tersusun rapi sesuai abjad (A–Z)</strong>.
+              <br>a) Antara <em>Sequential Search</em> dan <em>Binary Search</em>, algoritma mana yang paling efisien untuk mencari satu nama donatur? Jelaskan perbandingan jumlah langkah maksimalnya!
+              <br>b) Bagaimana kamu mengaitkan keteraturan penyusunan data (<em>nizham</em>) dan kebijaksanaan memilih algoritma paling efisien (<em>hikmah</em> — QS. Al-Baqarah: 31 & 269) dengan cara seorang pelajar muslim menyelesaikan masalah sehari-hari?
+            </p>
+            <textarea id="essay1Input" rows="5" oninput="saveProgress()" placeholder="Tuliskan analisis perbandingan langkah dan refleksi nilai nizham/hikmah di sini..." class="w-full rounded-xl border-2 border-slate-200 focus:border-emerald-600 focus:ring-0 p-3.5 text-sm text-slate-800 bg-slate-50"></textarea>
+          </div>
+
+          <!-- Soal Uraian 2 -->
+          <div class="space-y-3">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-900 font-bold text-xs">Uraian 2 (Proyek Pseudocode)</span>
+              <span class="text-xs font-semibold text-emerald-700">Indikator 1 (Pemilihan Struktur Data) & Indikator 4 (Menyusun Pseudocode Sistematis)</span>
+            </div>
+            <p class="text-sm font-semibold text-slate-800 leading-relaxed">
+              2. Pilihlah <strong>SATU (1)</strong> dari tiga studi kasus kontekstual Islami berikut:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+              <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                <strong class="text-emerald-900 block mb-1">🕌 Kasus A: Antrian Zakat Fitrah</strong>
+                Struktur data <strong>Queue (FIFO)</strong> untuk menambahkan muzakki ke antrian (<code>ENQUEUE</code>) dan memanggil muzakki terdepan untuk dilayani (<code>DEQUEUE</code>).
+              </div>
+              <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                <strong class="text-emerald-900 block mb-1">🌳 Kasus B: Pohon Silsilah (Syajarah)</strong>
+                Struktur data <strong>Tree</strong> untuk menelusuri dan menampilkan keturunan (<code>child</code>) dari seorang tokoh/kakek (<code>root/parent</code>).
+              </div>
+              <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                <strong class="text-emerald-900 block mb-1">🗺️ Kasus C: Rute Perjalanan Dakwah</strong>
+                Struktur data <strong>Graph</strong> atau pengurutan jarak pos dakwah terdekat menggunakan <strong>Selection Sort / Bubble Sort</strong>.
+              </div>
+            </div>
+            <p class="text-xs text-slate-600">
+              Tuliskan: <strong>(1) Kasus & Struktur Data yang dipilih beserta alasannya</strong>, dan <strong>(2) Pseudocode lengkap yang rapi, berindentasi, serta dilengkapi komentar penjelasan!</strong>
+            </p>
+            <textarea id="essay2Input" rows="8" oninput="saveProgress()" placeholder="PROGRAM Solusi_Kasus_Islami&#10;DEKLARASI:&#10;  // Tuliskan variabel dan struktur data yang dipilih...&#10;&#10;ALGORITMA:&#10;  // Tuliskan langkah-langkah logis pseudocode..." class="w-full rounded-xl border-2 border-slate-200 focus:border-emerald-600 focus:ring-0 p-3.5 text-sm code-font text-slate-800 bg-slate-900 text-emerald-300"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tombol Submit -->
+      <div class="bg-white rounded-2xl p-6 shadow-md border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-xs text-slate-600">
+          Pastikan seluruh jawaban telah diperiksa dengan teliti (<em>itqan</em>) sebelum dikirim ke Google Spreadsheet Guru.
+        </div>
+        <button id="submitBtn" onclick="submitAssessment()" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold text-sm shadow-md transition flex items-center justify-center gap-2">
+          <span>🚀 Kirim Jawaban Asesmen Sumatif</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: HASIL & REFLEKSI 4P ==================== -->
+    <section id="resultView" class="hidden space-y-6">
+      <div class="bg-white rounded-2xl shadow-lg border border-emerald-200 p-6 sm:p-8 text-center max-w-2xl mx-auto space-y-5">
+        <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-3xl mx-auto font-bold">
+          ✓
+        </div>
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-emerald-700">Alhamdulillah • Jawaban Berhasil التوثيق</span>
+          <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Asesmen Sumatif Selesai!</h2>
+          <p id="resultStudentName" class="text-sm font-bold text-slate-600 mt-1"></p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 bg-emerald-50 border border-emerald-200 rounded-2xl p-5">
+          <div>
+            <span class="text-xs text-slate-500 block">Skor Objektif (Pilihan Ganda)</span>
+            <span id="resultScorePG" class="text-3xl font-extrabold text-emerald-800">0</span>
+            <span class="text-xs text-emerald-700 block mt-0.5">Skala 0 – 100</span>
+          </div>
+          <div>
+            <span class="text-xs text-slate-500 block">Status Soal Uraian & Pseudocode</span>
+            <span class="text-sm font-extrabold text-amber-700 block mt-2">Terkirim ke Spreadsheet</span>
+            <span class="text-xs text-slate-500 block mt-0.5">Menunggu Penilaian Rubrik Guru</span>
+          </div>
+        </div>
+
+        <!-- Ringkasan KKT per Indikator -->
+        <div class="text-left bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2 text-xs">
+          <div class="font-bold text-slate-700 border-b pb-1.5">📊 Rincian Capaian Indikator Objektif:</div>
+          <div id="indicatorSummaryList" class="space-y-1.5"></div>
+        </div>
+
+        <p class="text-xs text-slate-500 italic">
+          "Setiap kali kamu berpikir sistematis, memilih cara yang paling efisien, dan merancang solusi yang rapi dan logis — sesungguhnya kamu sedang meneladani cara berpikir yang Allah ajarkan kepada Adam AS dan yang diwariskan Al-Khawarizmi kepada umat."
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL PENGATURAN URL GOOGLE APPS SCRIPT (UNTUK GURU) -->
+  <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-extrabold text-slate-800 text-base">⚙️ Konfigurasi Endpoint Backend (Google Apps Script)</h3>
+        <button onclick="closeConfigModal()" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
+      </div>
+      <div class="space-y-2 text-xs text-slate-600">
+        <p>Masukkan URL Web App Google Apps Script (berakhiran <code>/exec</code>) dari Google Spreadsheet Asesmen Anda:</p>
+        <input type="url" id="gasUrlInput" placeholder="https://script.google.com/macros/s/AKfycbwO7l0MH9AYcaTQxKSRm94mofCUmCgT_QZKCH62ljve7yMJ7_Ui3tB0jiMoTq9irrRoQA/exec" class="w-full rounded-xl border-2 border-slate-200 px-3.5 py-2.5 text-xs font-mono text-slate-800 focus:border-emerald-600 focus:ring-0">
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeConfigModal()" class="px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">Batal</button>
+        <button onclick="saveConfigUrl()" class="px-4 py-2 rounded-lg bg-emerald-700 text-white text-xs font-bold">Simpan URL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-500 mt-8">
+    RPM Informatika Kelas X — Algoritma dan Struktur Data Standar | <strong>SMAIT Al Ishlah Gorontalo</strong> • Rahmat Djafar, S.Pd., Gr.
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // =========================================================================
+    // 1. KONFIGURASI URL GOOGLE APPS SCRIPT
+    // Ganti string di bawah ini dengan URL Web App GAS Anda agar siswa tidak
+    // perlu mengatur apa pun saat membuka link GitHub Pages.
+    // =========================================================================
+    const DEFAULT_SCRIPT_URL = "TEMPELKAN_URL_WEB_APP_GOOGLE_APPS_SCRIPT_ANDA_DI_SINI";
+
+    function getScriptUrl() {
+      return localStorage.getItem("GAS_ENDPOINT_URL") || DEFAULT_SCRIPT_URL;
+    }
+
+    // =========================================================================
+    // 2. BANK SOAL SUMATIF (10 PILIHAN GANDA SESUAI INDIKATOR RPM)
+    // =========================================================================
+    const QUESTIONS = [
+      {
+        id: "q1",
+        no: 1,
+        indicator: "Indikator 5: Keteladanan Al-Khawarizmi & Tadabur QS. Al-Baqarah: 31",
+        question: "Dalam QS. Al-Baqarah: 31, Allah SWT mengajarkan kepada Nabi Adam AS nama-nama segala sesuatu yang menjadi landasan penting dalam mengklasifikasikan dan mengorganisasi pengetahuan secara teratur (nizham). Ilmuwan muslim abad ke-9 asal Khwarizm yang meletakkan dasar penyelesaian masalah secara sistematis melalui bukunya 'al-Kitāb al-mukhtaṣar fī ḥisāb al-jabr waʾl-muqābala' hingga namanya diabadikan menjadi istilah 'Algoritma' adalah...",
+        options: {
+          A: "Ibnu Sina (Avicenna)",
+          B: "Al-Biruni",
+          C: "Muhammad bin Musa Al-Khawarizmi",
+          D: "Jabir bin Hayyan"
+        },
+        correct: "C"
+      },
+      {
+        id: "q2",
+        no: 2,
+        indicator: "Indikator 1: Mengidentifikasi Struktur Data Linear (Queue)",
+        question: "Takmir Masjid SMAIT Al Ishlah merancang aplikasi digital untuk mengatur panggilan jamaah pada pelayanan pembagian zakat fitrah. Prinsip utamanya adalah jamaah yang mendaftar paling awal harus dilayani terlebih dahulu agar adil dan tertib. Struktur data dan prinsip kerja yang paling tepat untuk kasus ini adalah...",
+        options: {
+          A: "Stack dengan prinsip LIFO (Last In First Out)",
+          B: "Queue dengan prinsip FIFO (First In First Out)",
+          C: "Tree dengan prinsip Hierarki Bertingkat",
+          D: "Graph dengan prinsip Jaringan Berbobot"
+        },
+        correct: "B"
+      },
+      {
+        id: "q3",
+        no: 3,
+        indicator: "Indikator 1: Mengidentifikasi Operasi Struktur Data (Stack)",
+        question: "Seorang santri meletakkan mushaf Al-Qur'an satu per satu ke dalam sebuah tumpukan vertikal di meja. Urutan mushaf yang diletakkan dari awal adalah: [Mushaf A, Mushaf B, Mushaf C]. Kemudian santri tersebut mengambil satu mushaf paling atas (operasi POP), lalu meletakkan lagi Mushaf D di atasnya (operasi PUSH). Urutan tumpukan mushaf dari bawah ke atas sekarang adalah...",
+        options: {
+          A: "Mushaf A, Mushaf B, Mushaf D",
+          B: "Mushaf B, Mushaf C, Mushaf D",
+          C: "Mushaf A, Mushaf C, Mushaf D",
+          D: "Mushaf D, Mushaf B, Mushaf A"
+        },
+        correct: "A"
+      },
+      {
+        id: "q4",
+        no: 4,
+        indicator: "Indikator 1: Struktur Data Non-Linear (Tree & Graph)",
+        question: "Perhatikan dua studi kasus berikut: (1) Penyusunan bagan silsilah keluarga (Syajarah an-Nasab) dari kakek hingga cucu, dan (2) Pemetaan rute perjalanan dakwah antarkota di Provinsi Gorontalo yang memiliki banyak jalur alternatif dan jarak tempuh antar-titik. Pasangan struktur data non-linear yang paling tepat untuk merepresentasikan Kasus (1) dan Kasus (2) secara berturut-turut adalah...",
+        options: {
+          A: "List dan Stack",
+          B: "Queue dan Tree",
+          C: "Graph dan Tree",
+          D: "Tree dan Graph"
+        },
+        correct: "D"
+      },
+      {
+        id: "q5",
+        no: 5,
+        indicator: "Indikator 2: Efisiensi Sequential Search vs Binary Search",
+        question: "Sebuah daftar berisi 16 nama santri yang sudah diurutkan berdasarkan abjad (A sampai Z). Jika kita mencari 1 nama santri menggunakan algoritma Binary Search, berapakah jumlah langkah perbandingan maksimal pada kondisi terburuk (worst case) dibandingkan dengan Sequential Search?",
+        options: {
+          A: "Binary Search maksimal 8 langkah, sedangkan Sequential Search maksimal 16 langkah",
+          B: "Binary Search maksimal 16 langkah, sedangkan Sequential Search maksimal 4 langkah",
+          C: "Binary Search maksimal 4 hingga 5 langkah, sedangkan Sequential Search maksimal 16 langkah",
+          D: "Keduanya membutuhkan tepat 16 langkah perbandingan"
+        },
+        correct: "C"
+      },
+      {
+        id: "q6",
+        no: 6,
+        indicator: "Indikator 2: Analisis Kondisi Penggunaan Searching",
+        question: "Meskipun Binary Search jauh lebih cepat pada data berukuran besar, pada kondisi manakah algoritma Sequential Search justru lebih praktis dan tepat dipilih?",
+        options: {
+          A: "Saat data berukuran jutaan baris dan sudah terurut rapi berdasarkan abjad",
+          B: "Saat jumlah data sangat sedikit dan posisi datanya masih acak (belum terurut)",
+          C: "Saat kita mencari nomor halaman pada kamus tebal yang terurut",
+          D: "Saat data disimpan dalam bentuk pohon hierarki bertingkat"
+        },
+        correct: "B"
+      },
+      {
+        id: "q7",
+        no: 7,
+        indicator: "Indikator 2: Penelusuran (Trace) Algoritma Sorting",
+        question: "Perhatikan data nilai hafalan 5 santri berikut: [7, 3, 9, 1, 5]. Jika diurutkan dari terkecil ke terbesar (ascending) menggunakan algoritma Selection Sort, bagaimanakah susunan data tepat setelah iterasi ke-1 (langkah pertukaran pertama) selesai dilakukan?",
+        options: {
+          A: "[1, 3, 9, 7, 5] — karena nilai terkecil (1) langsung dipilih dan ditukar dengan elemen pertama (7)",
+          B: "[3, 7, 1, 5, 9] — karena membandingkan dua elemen bertetangga hingga angka 9 menggelembung ke kanan",
+          C: "[1, 3, 5, 7, 9] — karena langsung terurut seluruhnya dalam satu kali pertukaran",
+          D: "[7, 3, 1, 5, 9] — karena angka 9 langsung bertukar posisi dengan angka 5"
+        },
+        correct: "A"
+      },
+      {
+        id: "q8",
+        no: 8,
+        indicator: "Indikator 3: Memahami Konsep Rekursi",
+        question: "Dalam sebuah fungsi rekursi (fungsi yang memanggil dirinya sendiri), terdapat dua komponen wajib yaitu Base Case (kondisi dasar/berhenti) dan Recursive Case (pemanggilan diri sendiri). Apa dampak yang akan terjadi pada program komputer apabila sebuah fungsi rekursi dirancang TANPA memiliki Base Case yang valid?",
+        options: {
+          A: "Program akan otomatis berubah menjadi algoritma Selection Sort",
+          B: "Program akan berjalan dua kali lebih cepat dan hemat memori",
+          C: "Fungsi hanya akan dieksekusi satu kali lalu langsung berhenti",
+          D: "Terjadi pemanggilan tanpa henti (infinite recursion) hingga memori penuh (stack overflow)"
+        },
+        correct: "D"
+      },
+      {
+        id: "q9",
+        no: 9,
+        indicator: "Indikator 3: Penerapan Rekursi Faktorial",
+        question: "Diketahui definisi fungsi rekursi faktorial: Faktorial(n) = n × Faktorial(n - 1) dengan kondisi dasar Faktorial(0) = 1. Urutan penelusuran nilai dan hasil akhir yang tepat untuk menghitung Faktorial(4) adalah...",
+        options: {
+          A: "4 + 3 + 2 + 1 = 10",
+          B: "4 × 3 × 2 × 1 × 1 = 24",
+          C: "4 × 4 × 4 × 4 = 256",
+          D: "4 × 3 × 2 = 12"
+        },
+        correct: "B"
+      },
+      {
+        id: "q10",
+        no: 10,
+        indicator: "Indikator 4: Menelusuri (Trace) Pseudocode Kontekstual",
+        question: "Perhatikan potongan pseudocode antrian wudhu berikut:\n1. BUAT Queue_Wudhu kosong\n2. ENQUEUE(Queue_Wudhu, \"Hafiz\")\n3. ENQUEUE(Queue_Wudhu, \"Alif\")\n4. DEQUEUE(Queue_Wudhu)\n5. ENQUEUE(Queue_Wudhu, \"Azzam\")\nSiapakah nama santri yang saat ini berada di posisi PALING DEPAN (Front) antrian untuk berwudhu?",
+        options: {
+          A: "Hafiz",
+          B: "Azzam",
+          C: "Alif",
+          D: "Antrian kosong"
+        },
+        correct: "C"
+      }
+    ];
+
+    // =========================================================================
+    // 3. STATE MANAGEMENT & TIMER
+    // =========================================================================
+    let currentStudent = "";
+    let userAnswers = {};
+    let startTime = null;
+    let timerInterval = null;
+    let remainingSeconds = 45 * 60; // 45 Menit
+
+    function renderQuestions() {
+      const container = document.getElementById("mcQuestionsContainer");
+      const navGrid = document.getElementById("questionNavGrid");
+      container.innerHTML = "";
+      navGrid.innerHTML = "";
+
+      QUESTIONS.forEach((q) => {
+        // Tombol Navigasi
+        const navBtn = document.createElement("a");
+        navBtn.href = `#card_${q.id}`;
+        navBtn.id = `nav_${q.id}`;
+        navBtn.className = "w-9 h-9 rounded-lg border-2 border-slate-200 flex items-center justify-center text-xs font-extrabold text-slate-600 hover:border-emerald-500 transition";
+        navBtn.textContent = q.no;
+        navGrid.appendChild(navBtn);
+
+        // Kartu Soal
+        const card = document.createElement("div");
+        card.id = `card_${q.id}`;
+        card.className = "bg-white rounded-2xl shadow-sm border border-slate-200 p-6 space-y-4 scroll-mt-24";
+
+        const formattedQuestion = q.question.replace(/\n/g, "<br>");
+
+        let optionsHtml = "";
+        for (const [optKey, optVal] of Object.entries(q.options)) {
+          const isChecked = userAnswers[q.id] === optKey ? "checked" : "";
+          const activeClass = userAnswers[q.id] === optKey
+            ? "border-emerald-600 bg-emerald-50/70 text-emerald-950"
+            : "border-slate-200 hover:border-emerald-300 bg-slate-50/50";
+
+          optionsHtml += `
+            <label id="lbl_${q.id}_${optKey}" class="flex items-start gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition ${activeClass}">
+              <input type="radio" name="${q.id}" value="${optKey}" ${isChecked} onchange="selectOption('${q.id}', '${optKey}')" class="mt-1 text-emerald-600 focus:ring-emerald-500" />
+              <span class="text-sm leading-relaxed"><strong class="mr-1">${optKey}.</strong> ${optVal}</span>
+            </label>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <span class="px-3 py-1 rounded-lg bg-emerald-900 text-amber-300 font-extrabold text-xs">Soal ${q.no}</span>
+            <span class="text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">${q.indicator}</span>
+          </div>
+          <div class="text-sm sm:text-base font-semibold text-slate-800 leading-relaxed ${q.no === 10 ? 'code-font text-xs sm:text-sm bg-slate-100 p-3 rounded-xl' : ''}">
+            ${formattedQuestion}
+          </div>
+          <div class="grid grid-cols-1 gap-2.5 pt-1">
+            ${optionsHtml}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      updateProgressUI();
+    }
+
+    function selectOption(qId, optKey) {
+      userAnswers[qId] = optKey;
+      // Perbarui gaya visual radio
+      ["A", "B", "C", "D"].forEach((k) => {
+        const lbl = document.getElementById(`lbl_${qId}_${k}`);
+        if (!lbl) return;
+        if (k === optKey) {
+          lbl.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition border-emerald-600 bg-emerald-50/70 text-emerald-950";
+        } else {
+          lbl.className = "flex items-start gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition border-slate-200 hover:border-emerald-300 bg-slate-50/50";
+        }
+      });
+      saveProgress();
+      updateProgressUI();
+    }
+
+    function updateProgressUI() {
+      const answered = Object.keys(userAnswers).length;
+      document.getElementById("answeredCount").textContent = answered;
+
+      QUESTIONS.forEach((q) => {
+        const navBtn = document.getElementById(`nav_${q.id}`);
+        if (!navBtn) return;
+        if (userAnswers[q.id]) {
+          navBtn.className = "w-9 h-9 rounded-lg border-2 border-emerald-600 bg-emerald-600 text-white flex items-center justify-center text-xs font-extrabold transition";
+        } else {
+          navBtn.className = "w-9 h-9 rounded-lg border-2 border-slate-200 flex items-center justify-center text-xs font-extrabold text-slate-600 hover:border-emerald-500 transition";
+        }
+      });
+    }
+
+    function startAssessment() {
+      const select = document.getElementById("studentSelect");
+      if (!select.value) {
+        alert("Silakan pilih Nama Lengkap Siswa terlebih dahulu!");
+        return;
+      }
+      currentStudent = select.value;
+
+      // Muat progress tersimpan jika siswa sempat refresh
+      const saved = localStorage.getItem(`ASESMEN_X_${currentStudent}`);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          userAnswers = parsed.answers || {};
+          document.getElementById("essay1Input").value = parsed.essay1 || "";
+          document.getElementById("essay2Input").value = parsed.essay2 || "";
+        } catch (e) {}
+      }
+
+      document.getElementById("activeStudentName").textContent = currentStudent;
+      document.getElementById("loginView").classList.add("hidden");
+      document.getElementById("quizView").classList.remove("hidden");
+      document.getElementById("timerBadge").classList.remove("hidden");
+      document.getElementById("timerBadge").classList.add("flex");
+
+      startTime = Date.now();
+      renderQuestions();
+      startTimer();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        remainingSeconds--;
+        if (remainingSeconds <= 0) {
+          clearInterval(timerInterval);
+          alert("Waktu pengerjaan telah habis! Jawabanmu akan dikirimkan secara otomatis.");
+          submitAssessment(true);
+          return;
+        }
+        const m = String(Math.floor(remainingSeconds / 60)).padStart(2, "0");
+        const s = String(remainingSeconds % 60).padStart(2, "0");
+        document.getElementById("timerText").textContent = `${m}:${s}`;
+      }, 1000);
+    }
+
+    function saveProgress() {
+      if (!currentStudent) return;
+      const data = {
+        answers: userAnswers,
+        essay1: document.getElementById("essay1Input").value,
+        essay2: document.getElementById("essay2Input").value
+      };
+      localStorage.setItem(`ASESMEN_X_${currentStudent}`, JSON.stringify(data));
+    }
+
+    // =========================================================================
+    // 4. PENGIRIMAN DATA KE GOOGLE APPS SCRIPT (BACKEND SPREADSHEET)
+    // =========================================================================
+    async function submitAssessment(forceSubmit = false) {
+      const answeredCount = Object.keys(userAnswers).length;
+      const essay1 = document.getElementById("essay1Input").value.trim();
+      const essay2 = document.getElementById("essay2Input").value.trim();
+
+      if (!forceSubmit) {
+        if (answeredCount < 10) {
+          alert(`Masih ada ${10 - answeredCount} soal Pilihan Ganda yang belum dijawab. Mohon lengkapi seluruh soal!`);
+          return;
+        }
+        if (!essay1 || !essay2) {
+          alert("Mohon lengkapi kedua soal Uraian & Proyek Pseudocode pada Bagian II sebelum mengirim!");
+          return;
+        }
+        const confirmSend = confirm(`Apakah kamu yakin ingin mengirimkan jawaban asesmen atas nama ${currentStudent}?`);
+        if (!confirmSend) return;
+      }
+
+      if (timerInterval) clearInterval(timerInterval);
+      const durationSec = startTime ? Math.round((Date.now() - startTime) / 1000) : 0;
+
+      // Hitung Skor Lokal & Ringkasan Indikator
+      let correctCount = 0;
+      QUESTIONS.forEach((q) => {
+        if (userAnswers[q.id] === q.correct) correctCount++;
+      });
+      const finalScorePG = correctCount * 10;
+
+      const submitBtn = document.getElementById("submitBtn");
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span>⏳ Mengirim Data ke Google Spreadsheet...</span>`;
+
+      const payload = {
+        nama: currentStudent,
+        answers: userAnswers,
+        essay1: essay1,
+        essay2: essay2,
+        duration: durationSec
+      };
+
+      const endpoint = getScriptUrl();
+      if (endpoint && !endpoint.includes("TEMPELKAN_URL")) {
+        try {
+          await fetch(endpoint, {
+            method: "POST",
+            mode: "no-cors", // Aman untuk POST lintas domain GitHub Pages -> Google Apps Script
+            headers: {
+              "Content-Type": "text/plain;charset=utf-8"
+            },
+            body: JSON.stringify(payload)
+          });
+        } catch (err) {
+          console.error("Gagal mengirim ke GAS:", err);
+        }
+      }
+
+      // Bersihkan cache lokal setelah terkirim
+      localStorage.removeItem(`ASESMEN_X_${currentStudent}`);
+      showResultView(finalScorePG, correctCount);
+    }
+
+    function showResultView(scorePG, correctCount) {
+      document.getElementById("quizView").classList.add("hidden");
+      document.getElementById("timerBadge").classList.add("hidden");
+      document.getElementById("resultView").classList.remove("hidden");
+
+      document.getElementById("resultStudentName").textContent = `Peserta Didik: ${currentStudent}`;
+      document.getElementById("resultScorePG").textContent = `${scorePG} (${correctCount}/10 Benar)`;
+
+      const ind1 = (userAnswers.q2 === "B" ? 1 : 0) + (userAnswers.q3 === "A" ? 1 : 0) + (userAnswers.q4 === "D" ? 1 : 0);
+      const ind2 = (userAnswers.q5 === "C" ? 1 : 0) + (userAnswers.q6 === "B" ? 1 : 0) + (userAnswers.q7 === "A" ? 1 : 0);
+      const ind3 = (userAnswers.q8 === "D" ? 1 : 0) + (userAnswers.q9 === "B" ? 1 : 0);
+      const ind4 = (userAnswers.q10 === "C" ? 1 : 0);
+      const ind5 = (userAnswers.q1 === "C" ? 1 : 0);
+
+      const summaryEl = document.getElementById("indicatorSummaryList");
+      summaryEl.innerHTML = `
+        <div class="flex justify-between"><span>• Indikator 1 (Identifikasi Struktur Data Linear & Non-Linear):</span><strong>${ind1}/3 Soal Benar</strong></div>
+        <div class="flex justify-between"><span>• Indikator 2 (Perbandingan Efisiensi Searching & Sorting):</span><strong>${ind2}/3 Soal Benar</strong></div>
+        <div class="flex justify-between"><span>• Indikator 3 (Konsep Rekursi & Base Case):</span><strong>${ind3}/2 Soal Benar</strong></div>
+        <div class="flex justify-between"><span>• Indikator 4 (Penelusuran Pseudocode):</span><strong>${ind4}/1 Soal Benar (+ Uraian 2)</strong></div>
+        <div class="flex justify-between"><span>• Indikator 5 (Nilai Nizham, Hikmah & Al-Khawarizmi):</span><strong>${ind5}/1 Soal Benar (+ Uraian 1)</strong></div>
+      `;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // =========================================================================
+    // 5. MODAL PENGATURAN GURU
+    // =========================================================================
+    function openConfigModal() {
+      document.getElementById("gasUrlInput").value = getScriptUrl();
+      document.getElementById("configModal").classList.remove("hidden");
+      document.getElementById("configModal").classList.add("flex");
+    }
+
+    function closeConfigModal() {
+      document.getElementById("configModal").classList.add("hidden");
+      document.getElementById("configModal").classList.remove("flex");
+    }
+
+    function saveConfigUrl() {
+      const val = document.getElementById("gasUrlInput").value.trim();
+      if (val) {
+        localStorage.setItem("GAS_ENDPOINT_URL", val);
+        alert("URL Endpoint Google Apps Script berhasil disimpan!");
+      }
+      closeConfigModal();
+    }
+  </script>
+</body>
+</html>
